@@ -275,3 +275,10 @@ uint8_t scd30::getSerialNumber()
  
     return SCDnoERROR;
 }
+scd30 * scd30::instance_scd = nullptr; ;
+scd30 * scd30::getInstance(){
+    if(instance_scd == nullptr){
+        instance_scd = new scd30(PA_11,PA_12,400000);
+    }
+    return instance_scd;
+}

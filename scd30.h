@@ -29,8 +29,16 @@
      *
      */
 class scd30 {
+
+private:
+    char i2cBuff[34];
+    bool initialise;
+    static scd30 * instance_scd;
+    scd30(PinName sda, PinName scl, int i2cFrequency);
  
 public:
+
+
     enum SCDerror {
         SCDnoERROR,         //all ok
         SCDisReady,         //ready ststus register
@@ -72,14 +80,7 @@ public:
     } scdSTR;
     
     
-    /** Create a SCD30 object using the specified I2C object
-     * @param sda - mbed I2C interface pin
-     * @param scl - mbed I2C interface pin
-     * @param I2C Frequency (in Hz)
-     *
-     * @return none
-     */
-     scd30(PinName sda, PinName scl, int i2cFrequency);
+
      
     /** Destructor
      *
@@ -197,10 +198,12 @@ public:
      * @return enum SCDerror
      */
     uint8_t getSerialNumber();
- 
-private:
-    char i2cBuff[34];
- 
+
+    bool getInitialise() {return initialise;};
+
+    static scd30 * getInstance();
+
+
 protected:
     I2C     _i2c;    
  
