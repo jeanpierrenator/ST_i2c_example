@@ -9,7 +9,7 @@ class Co2SensorStrategy : public SensorStrategy
 public:
     Co2SensorStrategy() {};
     virtual ~Co2SensorStrategy() {};
-    int getMesure() {
+    int getMesure() override {
         scd30 * scd = scd30::getInstance();
             scd->getReadyStatus();
         uint16_t redy = scd->scdSTR.ready;
@@ -20,17 +20,19 @@ public:
             SensorsLastValue::GetInstance()->setTempValue(scd->scdSTR.tempf);
             SensorsLastValue::GetInstance()->setHumidValue(scd->scdSTR.humf);
             return crcc;
+        }
+        return 1;
     };
-    int wakeUp() 
+    int wakeUp() override
     {
         return 0;
 
     };
-    int init()  
+    int init() override 
     {
         return scd30::getInstance()->setMeasInterval(5);
     };
-    int lowPower() 
+    int lowPower() override
     {
          return 0;
     };

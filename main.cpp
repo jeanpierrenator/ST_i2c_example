@@ -22,20 +22,17 @@ int main()
     Co2SensorStrategy c02;
     printf("hello\r\n");
         
-
+    c02.init();
 
     while (true) {
         int count = 0;
             scd->getReadyStatus();
         uint16_t redy = scd->scdSTR.ready;
-        if(redy == scd30::SCDisReady) {
-            uint8_t crcc = scd->readMeasurement();
-            count++;
-            if(crcc != scd30::SCDnoERROR) printf("ERROR: %d\r\n", crcc);
-            else printf("%5d  -> CO2: %9.3f   Temp: %7.3f   Hum: %5.2f\r\n",count, scd->scdSTR.co2f, scd->scdSTR.tempf, scd->scdSTR.humf);
+        if(c02.getMesure() == scd30::SCDisReady) {
+
+         printf("%5d  -> CO2: %9.3f   Temp: %7.3f   Hum: %5.2f\r\n",count, scd->scdSTR.co2f, scd->scdSTR.tempf, scd->scdSTR.humf);
         }
 
-        led = !led;
         ThisThread::sleep_for(BLINKING_RATE);
 
         i2c_test.read(0x55, test, 2, 0);
