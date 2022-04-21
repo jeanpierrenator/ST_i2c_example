@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------------
 // Constructor 
  
-scd30::scd30(PinName sda, PinName scl, int i2cFrequency)  : _i2c(sda, scl) {
+scd30::scd30(PinName sda, PinName scl, int i2cFrequency)  : _i2c(sda, scl),initialise(false) {
         _i2c.frequency(i2cFrequency);
 }
  
@@ -127,7 +127,7 @@ uint8_t scd30::readMeasurement()
     scdSTR.tempf = *(float*)&scdSTR.tempi;
     scdSTR.humf = *(float*)&scdSTR.humi;
 
-    printf(" c02 : %d temp : %d humi: %d \n",scdSTR.co2f,scdSTR.tempf,scdSTR.humf);
+    //printf(" c02 : %d temp : %d humi: %d \n",scdSTR.co2f,scdSTR.tempf,scdSTR.humf);
     
     return SCDnoERROR;
 }

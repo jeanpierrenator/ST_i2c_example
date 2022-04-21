@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sensorstrategy.h"
+#include "config.h"
 #include "scd30.h"
 #include "sensorslastvalue.h"
 
@@ -16,12 +17,13 @@ public:
         if(redy == scd30::SCDisReady) {
             uint8_t crcc = scd->readMeasurement();
             if(crcc != scd30::SCDnoERROR) return crcc;
+            //printf("crd ok: %d\n",crcc);
             SensorsLastValue::GetInstance()->setCO2Value(scd->scdSTR.co2f);
             SensorsLastValue::GetInstance()->setTempValue(scd->scdSTR.tempf);
             SensorsLastValue::GetInstance()->setHumidValue(scd->scdSTR.humf);
-            return crcc;
+            return 0;
         }
-        return 1;
+        return scd->scdSTR.ready;
     };
     int wakeUp() override
     {
@@ -30,7 +32,18 @@ public:
     };
     int init() override 
     {
-        return scd30::getInstance()->setMeasInterval(5);
+        int ret =0;
+        scd30 * scd = scd30::getInstance();
+        if(scd->getInitialise() != true){
+        ret += scd->softReset();
+        ThisThread::sleep_for(2000);
+        ret += scd->getSerialNumber();
+        
+        ret += scd->setMeasInterval(CO2_SENSOR_PERIOD);
+        ret += scd->startMeasurement(0);
+        scd->setInitialise();
+        }
+        return ret;
     };
     int lowPower() override
     {

@@ -34,10 +34,10 @@ private:
     char i2cBuff[34];
     bool initialise;
     static scd30 * instance_scd;
-    scd30(PinName sda, PinName scl, int i2cFrequency);
+    
  
 public:
-
+    scd30(PinName sda, PinName scl, int i2cFrequency);
 
     enum SCDerror {
         SCDnoERROR,         //all ok
@@ -200,6 +200,7 @@ public:
     uint8_t getSerialNumber();
 
     bool getInitialise() {return initialise;};
+    void setInitialise() {initialise = true;};
 
     static scd30 * getInstance();
 
