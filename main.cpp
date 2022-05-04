@@ -4,37 +4,72 @@
  */
 
 #include "mbed.h"
-#include "i2c_ST.h"
-#include "scd30.h"
-#include "humidsensorstrategy.h"
-#include "tempsensorstrategy.h"
-#include "co2sensorstrategy.h"
+#include "VEML7700.h"
+#include "inttypes.h"
+#include <cstdint>
+#include <ctime>
+
+
 // Blinking rate in milliseconds
-#define BLINKING_RATE     5000ms
+#define STEPPING     5s
+
+I2C i2c(PA_11,PA_12);
+
+VEML7700 capteur(PA_11,PA_12,0x10);
+
+bool getMesure(int32_t* data)
+{
+    *data = capteur.getALS();
+    return true;
+};
+
+bool init()
+{
+    capteur.setALSConf(384);
+    return true;
+};
+
+bool wakeUp()
+{
+    capteur.setPowerSaving(0xFF);
+    return true;
+};
+
+bool lowPower()
+{
+    capteur.setPowerSaving(1);
+    return true;
+};
+
+
+
+
 
 
 int main()
 {
-    char test[5]; 
-    I2C_ST i2c_test(PA_11,PA_12);
-    // Initialise the digital pin LED1 as an output
-    scd30 * scd = scd30::getInstance();
-    Co2SensorStrategy c02;
-    printf("hello\r\n");
-        
-    c02.init();
+    // param I2C
+    //PinName I2CSCL = PA_12;
+    //PinName I2CSDA = PA_11; 
 
+    //char addr_capteur = 0x76;
+
+
+    char data[0];
+    int32_t luminausite;
+    Timer t;
+    t.start();
+    init();
+    ThisThread::sleep_for(110ms);
+    getMesure(&luminausite);
+    t.stop();
+    printf("The time taken was %f seconds\n", t.read());
+    printf("ALS = %d \r\n", luminausite);
+    //printf("Oui cela marche !!! \r\n");
+    //lowPower();
     while (true) {
-        int count = 0;
-            scd->getReadyStatus();
-        uint16_t redy = scd->scdSTR.ready;
-        if(c02.getMesure() == scd30::SCDisReady) {
+        
 
-         printf("%5d  -> CO2: %9.3f   Temp: %7.3f   Hum: %5.2f\r\n",count, scd->scdSTR.co2f, scd->scdSTR.tempf, scd->scdSTR.humf);
-        }
-
-        ThisThread::sleep_for(BLINKING_RATE);
-
-        i2c_test.read(0x55, test, 2, 0);
     }
 }
+
