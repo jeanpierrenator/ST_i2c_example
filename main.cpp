@@ -15,36 +15,6 @@
 
 I2C i2c(PA_11,PA_12);
 
-VEML7700 capteur(PA_11,PA_12,0x10);
-
-bool getMesure(int32_t* data)
-{
-    *data = capteur.getALS();
-    return true;
-};
-
-bool init()
-{
-    capteur.setALSConf(384);
-    return true;
-};
-
-bool wakeUp()
-{
-    capteur.setPowerSaving(0xFF);
-    return true;
-};
-
-bool lowPower()
-{
-    capteur.setPowerSaving(1);
-    return true;
-};
-
-
-
-
-
 
 int main()
 {

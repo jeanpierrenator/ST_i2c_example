@@ -84,8 +84,9 @@ bit[14] int_th_high Read bit. Indicate a high threshold exceed.
 bit[13:0] (reserved)
 */
 
-void VEML7700::setALSConf(uint16_t conf) 
+int VEML7700::setALSConf(uint16_t conf) 
 {
+    int res;
     uint8_t data[3] ;
     /*
     data[0] = CMD_ALS_CONF ;
@@ -95,20 +96,24 @@ void VEML7700::setALSConf(uint16_t conf)
     data[0] = CMD_ALS_CONF ;
     data[1] = 0x0000;
     data[2] = 0x0000;
-    writeRegs(data, 3) ;
+   res += writeRegs(data, 3) ;
+   return res;
 }
 
-void VEML7700::setALS_WH(uint16_t wh) 
+int VEML7700::setALS_WH(uint16_t wh) 
 {
+    int res; 
     uint8_t data[3] ;
     data[0] = CMD_ALS_WH ;
     data[1] =  wh & 0xFF ;
     data[2] = (wh >> 8) & 0xFF ;
-    writeRegs(data, 3) ;
+    res += writeRegs(data, 3) ;
+    return res;
 }
 
-void VEML7700::setPowerSaving(uint16_t ps) 
+int VEML7700::setPowerSaving(uint16_t ps) 
 {
+    int res;
     uint8_t data[3] ;
     data[0] = CMD_PWR_SAVINGS ;
     /*
@@ -125,41 +130,49 @@ void VEML7700::setPowerSaving(uint16_t ps)
         data[1] = 0x00 ;
         data[2] = 0x06 ;
     }
-    writeRegs(data, 3) ;
+    res += writeRegs(data, 3) ;
+    return res;
 }
 
-uint16_t VEML7700::getALS(void) 
+int VEML7700::getALS(uint16_t & temp) 
 {
+    int res;
     uint16_t als = 0 ;
     uint8_t cmd = CMD_ALS ;
     uint8_t data[2] ;
-    readRegs(cmd, data, 2) ;
+    res += readRegs(cmd, data, 2) ;
     als = (data[1] << 8) | data[0] ;
-    return( als ) ;
+    temp* = als;
+    return res ;
 }
 
-uint16_t VEML7700::getWHITE(void) 
+int VEML7700::getWHITE(uint16_t & temp) 
 {
+    int res;
     uint16_t white = 0 ;
     uint8_t cmd = CMD_WHITE ;
     uint8_t data[2] ;
-    readRegs(cmd, data, 2) ;
+    res += readRegs(cmd, data, 2) ;
     white = (data[1] << 8) | data[0] ;
-    return( white ) ;
+    *temp = white;
+    return res ;
 }
 
-uint16_t VEML7700::getALS_INT(void) 
+int VEML7700::getALS_INT(uint16_t & temp) 
 {
+    int res;
     uint16_t als_int = 0 ;
     uint8_t cmd = CMD_ASL_INT ;
     uint8_t data[2] ;
-    readRegs(cmd, data, 2) ;
+    res += readRegs(cmd, data, 2) ;
     als_int = (data[1] << 8) | data[0] ;
-    return( als_int ) ;
+    *temp = als_int;
+    return res;
+    
 }
   
-VEML7700::VEML7700(PinName sda, PinName scl, int addr) :
-    m_i2c(sda, scl), m_addr(addr<<1) 
+VEML7700::VEML7700( int addr) :
+    m_addr(addr<<1) 
 {
     // activate the peripheral
 }
@@ -169,12 +182,25 @@ VEML7700::~VEML7700()
 {
 }
 
-void VEML7700::readRegs(int addr, uint8_t * data, int len) {
+int VEML7700::readRegs(int addr, uint8_t * data, int len) {
+    int res;
     char t[1] = {static_cast<char>(addr)};
-    m_i2c.write(m_addr, t, 1, true);
-    m_i2c.read(m_addr, (char *)data, len);
+    res += i2c.write(m_addr, t, 1, true);
+    res += i2c.read(m_addr, (char *)data, len);
+    return res;
 }
 
-void VEML7700::writeRegs(uint8_t * data, int len) {
-    m_i2c.write(m_addr, (char *)data, len);
+int VEML7700::writeRegs(uint8_t * data, int len) {
+    int res;
+    res += i2c.write(m_addr, (char *)data, len);
+    return res;
+}
+
+static VEML7700* Instance = nullptr;
+
+static VEML7700* getInstance(){
+    if (Instance == nullptr){
+        Instance = new VEML7700(0x10);
+    }
+
 }

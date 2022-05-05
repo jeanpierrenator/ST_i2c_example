@@ -11,6 +11,7 @@
  * @code
 * @endcode
 */
+extern I2C i2c;
 class VEML7700
 {
 public:
@@ -53,21 +54,21 @@ public:
  * @note 0=ALS power on, 1=ALS shutdown
  * default conf = 0000000110000001 (385)
  */
-void setALSConf(uint16_t conf) ;
+int setALSConf(uint16_t conf) ;
 
 /**
  * set ALS high threshold window setting
  * @param uint16_t wh value to set
  * @returns none
  */
-void setALS_WH(uint16_t wh) ;
+int setALS_WH(uint16_t wh) ;
 
 /**
  * set ALS low threshold window setting
  * @param uint16_t wl value to set
  * @returns none
  */
-void setALS_WL(uint16_t wl) ;
+int setALS_WL(uint16_t wl) ;
 
 /**
  * set Power Saving setting
@@ -78,21 +79,21 @@ void setALS_WL(uint16_t wl) ;
  * ON  = 1
  * OFF = 0
  */
-void setPowerSaving(uint16_t ps) ;
+int setPowerSaving(uint16_t ps) ;
 
 /**
  * get ALS 
  * @param none
  * @returns uint16_t ALS (Ambient Light Sensed(?))
  */
-uint16_t getALS(void) ;
+int getALS(uint16_t & temp) ;
 
 /**
  * get White channel reading
  * @param none
  * @returns uint16_t White channel sensed
  */
-uint16_t getWHITE(void) ;
+int getWHITE(uint16_t & temp) ;
 
 /**
  * get ALS INT trigger event
@@ -102,13 +103,19 @@ uint16_t getWHITE(void) ;
  * @note bit[14] ALS_IF_H ALS crossing high threshold INT trigger event
  * @note bit[13:0] (reserved)
  */
-uint16_t getALS_INT(void) ;
+int getALS_INT(uint16_t & temp);
+
+
+static VEML7700 * getInstance();
+
   
 private:
-  I2C m_i2c;
+  
   int m_addr;
   void readRegs(int addr, uint8_t * data, int len);
   void writeRegs(uint8_t * data, int len);
+  static VEML7700 * Instance;
+
 
 };
 #endif /* _VEML6030_H_ */
