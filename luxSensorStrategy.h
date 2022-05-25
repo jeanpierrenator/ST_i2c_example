@@ -1,23 +1,26 @@
 #pragma once
 #include "sensorstrategy.h"
+#include "sensorslastvalue.h"
 #include "VEML7700.h"
 #include "config.h"
+#include "mbed.h"
 
 class LuxSensorStrategy :  public SensorStrategy
 {
     public:
-        LuxSensorStrategy();
     int getMesure( )
     {
         int res;
         uint16_t value;
-        res += VEML7700::getInstance()->getALS(&value);
+        res += VEML7700::getInstance()->getALS(value);
+        SensorsLastValue::GetInstance()->setLumiValue((float)(value/10));
         return res;
     };
 
     int init()
     {
         int res;
+        LUX_POWER_LINE = 1;
         res += VEML7700::getInstance()->setALSConf(384);
         return res;
     };
@@ -34,7 +37,7 @@ class LuxSensorStrategy :  public SensorStrategy
 
     int lowPower()
     {
-         LUX_POWER_LINE = 0;
+        LUX_POWER_LINE = 0;
         return 0;
     };
 };

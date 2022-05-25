@@ -142,7 +142,7 @@ int VEML7700::getALS(uint16_t & temp)
     uint8_t data[2] ;
     res += readRegs(cmd, data, 2) ;
     als = (data[1] << 8) | data[0] ;
-    temp* = als;
+    temp = als;
     return res ;
 }
 
@@ -154,7 +154,7 @@ int VEML7700::getWHITE(uint16_t & temp)
     uint8_t data[2] ;
     res += readRegs(cmd, data, 2) ;
     white = (data[1] << 8) | data[0] ;
-    *temp = white;
+    temp = white;
     return res ;
 }
 
@@ -166,7 +166,7 @@ int VEML7700::getALS_INT(uint16_t & temp)
     uint8_t data[2] ;
     res += readRegs(cmd, data, 2) ;
     als_int = (data[1] << 8) | data[0] ;
-    *temp = als_int;
+    temp = als_int;
     return res;
     
 }
@@ -196,11 +196,12 @@ int VEML7700::writeRegs(uint8_t * data, int len) {
     return res;
 }
 
-static VEML7700* Instance = nullptr;
+VEML7700* VEML7700::Instance = nullptr;
 
-static VEML7700* getInstance(){
+VEML7700* VEML7700::getInstance(){
     if (Instance == nullptr){
         Instance = new VEML7700(0x10);
     }
-
+    
+    return Instance;
 }

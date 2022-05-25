@@ -22,7 +22,7 @@ public:
   * @param sdl SCL pin
   * @param addr addr of the I2C peripheral
   */
-  VEML7700(PinName sda, PinName scl, int addr);
+  VEML7700( int addr);
 
 
   /**
@@ -112,8 +112,8 @@ static VEML7700 * getInstance();
 private:
   
   int m_addr;
-  void readRegs(int addr, uint8_t * data, int len);
-  void writeRegs(uint8_t * data, int len);
+  int readRegs(int addr, uint8_t * data, int len);
+  int writeRegs(uint8_t * data, int len);
   static VEML7700 * Instance;
 
 
