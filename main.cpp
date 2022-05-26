@@ -15,9 +15,9 @@
 // Blinking rate in milliseconds
 #define BLINKING_RATE     5000ms
 
- //   I2C i2c(PA_11,PA_12);
+   I2C i2c(PA_11,PA_12);
 
- SensorStrategy * saTempstrategy = new tempSensorStrategy();
+  SensorStrategy * saTempstrategy = new tempSensorStrategy();
   SensorStrategy * saHumidstrategy = new HumidSensorStrategy();
   SensorStrategy * saPressstrategy = new PressSensorStrategy();
 int main()
@@ -46,7 +46,7 @@ int main()
     saTempstrategy->lowPower();
     saHumidstrategy->lowPower();
 
-    printf(" press: %.2f, temp : %.2f , humid %.2f", SensorsLastValue::GetInstance()->getpressValue(),SensorsLastValue::GetInstance()->getTempValue(),SensorsLastValue::GetInstance()->getHumidValue());
+    printf(" press: %.2f, temp : %.2f , humid %.2f \n", SensorsLastValue::GetInstance()->getpressValue(),SensorsLastValue::GetInstance()->getTempValue(),SensorsLastValue::GetInstance()->getHumidValue());
     
         //printf(" mesure? :%d\n",sensor.IAQmeasure());
          
