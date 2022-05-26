@@ -6,28 +6,51 @@
 #include "mbed.h"
 #include "i2c_ST.h"
 #include "mbed_bme680.h"
+#include "humidsensorstrategy.h"
+#include "presssensorstrategy.h"
 #include "tempsensorstrategy.h"
+#include "sensorslastvalue.h"
 
 // Blinking rate in milliseconds
 #define BLINKING_RATE     5000ms
 
     I2C i2c(PA_11,PA_12);
+
+    DigitalOut Alim_l1(PA_7);
+
 int main()
 {
-    printf("hello\n");
-    BME680 bme680;
-    bme680.begin();
-    char test[5]; 
-    I2C_ST i2c_test(PA_11,PA_12);
-    while(1){
-        //printf(" mesure? :%d\n",sensor.IAQmeasure());
-          if (bme680.performReading())
-        {
-            printf("   %.2f      ", bme680.getTemperature());
-            printf("%.2f    ", bme680.getHumidity());
-            printf("%.2f    ", bme680.getPressure() / 100.0);
-            printf("%0.2f\r\n", bme680.getGasResistance());
-        }
-        ThisThread::sleep_for(BLINKING_RATE);
+    Alim_l1 = 0;
+    Timer t;
+
+    humidSensorStrategy HumidSensor;
+    pressSensorStrategy PressSensor;
+    tempSensorStrategy TempSensor;
+
+    HumidSensor.init();
+    PressSensor.init();
+    TempSensor.init();
+
+    while (true) {
+    t.start();
+    HumidSensor.wakeUp();
+    PressSensor.wakeUp();
+    TempSensor.wakeUp();
+
+    HumidSensor.getMesure();
+    PressSensor.getMesure();
+    TempSensor.getMesure();
+
+    HumidSensor.lowPower();
+    PressSensor.lowPower();
+    TempSensor.lowPower();
+
+    t.stop();
+    
+    printf("The time taken was %f seconds\n", t.read());
+    printf("Humid = %5.2f, Press = %5.2f, temp = %5.2f \r\n", SensorsLastValue::GetInstance()->getpressValue(), SensorsLastValue::GetInstance()->getHumidValue(), SensorsLastValue::GetInstance()->getTempValue());
+    t.reset();
+
+    ThisThread::sleep_for(1000ms);
     }
 }

@@ -2,10 +2,10 @@
 #include "sensorstrategy.h"
 #include "mbed_bme680.h"
 
-class HumidSensorStrategy :  public SensorStrategy
+class humidSensorStrategy :  public SensorStrategy
 {
 public:
-    HumidSensorStrategy();
+    virtual ~humidSensorStrategy() {};
     int getMesure() override{
         // retreve the value after the measurment (values already calculated)
         float temp = BME680::getInstance()->getHumidity();
