@@ -20,7 +20,7 @@ class LuxSensorStrategy :  public SensorStrategy
     int init()
     {
         int res;
-        LUX_POWER_LINE = 1;
+        LUX_POWER_LINE = 0;
         res += VEML7700::getInstance()->setALSConf(384);
         return res;
     };
@@ -28,7 +28,7 @@ class LuxSensorStrategy :  public SensorStrategy
     int wakeUp()
     {
         int res;
-        LUX_POWER_LINE = 1;
+        LUX_POWER_LINE = 0;
         ThisThread::sleep_for(chrono::milliseconds(100));
         res += VEML7700::getInstance()->setALSConf(384);
         ThisThread::sleep_for(chrono::milliseconds(150));
@@ -37,7 +37,7 @@ class LuxSensorStrategy :  public SensorStrategy
 
     int lowPower()
     {
-        LUX_POWER_LINE = 0;
+        LUX_POWER_LINE = 1;
         return 0;
     };
 };

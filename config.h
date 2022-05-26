@@ -24,4 +24,4 @@ DigitalOut Alim_l3(PA_9);
 #define LUX_SENSOR 0x05
 #define LUX_SENSOR_PERIOD 11000
 #define LUX_STRATEGIE LuxSensorStrategy()
-#define LUX_POWER_LINE Alim_l1;
+DigitalOut & LUX_POWER_LINE = Alim_l1;
