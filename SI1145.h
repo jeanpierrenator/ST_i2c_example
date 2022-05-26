@@ -3,7 +3,7 @@
 #include "mbed.h"
 #define SI1145_ADDRESS (0x60 << 1)
 
-
+extern I2C i2c;
 /** SI1145 class
  *  SI1145: A library to correct environmental data using adafruit SI1145 device
  */
@@ -12,46 +12,39 @@ class SI1145
 {
 public:
 
-    /** Create a SI1145 instance
-     *  which is connected to specified I2C pins with specified address
-     * @param sda I2C-bus SDA pin
-     * @param scl I2C-bus SCL pin
-     * @param slave_adr (option) I2C-bus address (default: 0x60)
-     */
-    SI1145(PinName sda, PinName sck, char slave_adr = SI1145_ADDRESS);
+
     /** Create a SI1145 instance
      *  which is connected to specified I2C pins with specified address
      * @param i2c_obj I2C object (instance)
      * @param slave_adr (option) I2C-bus address (default: 0x60)
      */
-    SI1145(I2C &i2c_obj, char slave_adr = SI1145_ADDRESS);
+    SI1145(char slave_adr = SI1145_ADDRESS);
     /** Destructor of SI1145
      */
     //virtual ~SI1145();
     /** Initialize SI1145 sensor
      *  Configure sensor setting and read parameters for calibration
      */
-    void initalize(void);
+    int initalize(void);
    /** Begin Initialization SI1145 sensor
      *  Configure sensor setting and read parameters for calibration
      */
-    uint16_t getUV(void);
+    int getUV(uint16_t & temp);
     /** Read the current VIS value from SI1145 sensor
      */
-    uint16_t getVIS(void);
-    float getUVlsb(void);
-    float getUVmsb(void);
+    int getVIS(uint16_t & temp);
+    int getUVlsb(float & temp);
+    int getUVmsb(float & temp);
     /** Read the current IR value from SI1145 sensor
      */
-    uint16_t getIR(void);
+    int getIR(uint16_t & temp);
     /** Read the current PROX value from SI1145 sensor
      */
-    uint16_t getPROX(void);
-
+    int getPROX(uint16_t & temp);
+    static SI1145 * getInstance();
 private:
-
-    I2C         *i2c_p;
-    I2C         &i2c;
+    static SI1145 * Instance;
+   
     char        address;
     int32_t     t_fine;
 };
