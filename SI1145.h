@@ -25,22 +25,22 @@ public:
     /** Initialize SI1145 sensor
      *  Configure sensor setting and read parameters for calibration
      */
-    int initalize(void);
+    int8_t initalize(void);
    /** Begin Initialization SI1145 sensor
      *  Configure sensor setting and read parameters for calibration
      */
-    int getUV(uint16_t & temp);
+    int8_t getUV(uint16_t & temp);
     /** Read the current VIS value from SI1145 sensor
      */
-    int getVIS(uint16_t & temp);
-    int getUVlsb(float & temp);
-    int getUVmsb(float & temp);
+    int8_t getVIS(uint16_t & temp);
+    int8_t getUVlsb(float & temp);
+    int8_t getUVmsb(float & temp);
     /** Read the current IR value from SI1145 sensor
      */
-    int getIR(uint16_t & temp);
+    int8_t getIR(uint16_t & temp);
     /** Read the current PROX value from SI1145 sensor
      */
-    int getPROX(uint16_t & temp);
+    int8_t getPROX(uint16_t & temp);
     static SI1145 * getInstance();
 private:
     static SI1145 * Instance;
@@ -48,4 +48,3 @@ private:
     char        address;
     int32_t     t_fine;
 };
-
