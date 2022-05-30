@@ -23,9 +23,9 @@ SI1145::SI1145( char slave_adr)
 //        delete  i2c_p;
 //}
     
-int SI1145::initalize(void) {
+int8_t SI1145::initalize(void) {
     uint16_t idu;
-    int ret;
+    int8_t ret;
     //i2c.frequency(100000);
    char id[1] = {0x00};
     ret += i2c.write(address,id,1);
@@ -158,11 +158,11 @@ int SI1145::initalize(void) {
 }
 
 
-int SI1145::getUV(uint16_t & temp)
+int8_t SI1145::getUV(uint16_t & temp)
 {
     // Variables
     //float valf; 
-    int ret;                         // uv value
+    int8_t ret;                         // uv value
     char reg[1];                         // register
     char data[2] = {0,0};                // data 2 x 8 bits
     uint16_t vali;                       // uv value
@@ -181,11 +181,11 @@ int SI1145::getUV(uint16_t & temp)
 }
 
 
-int SI1145::getVIS(uint16_t & temp)
+int8_t SI1145::getVIS(uint16_t & temp)
 {
     // Variables
     //float valf; 
-    int ret;                         // vis (IR+UV) value
+    int8_t ret;                         // vis (IR+UV) value
     char reg[1];                         // register
     char data[2] = {0,0};                // data 2 x 8 bits
     uint16_t vali;                       // vis value
@@ -202,11 +202,11 @@ int SI1145::getVIS(uint16_t & temp)
     return ret;
 }
 
-int SI1145::getIR(uint16_t & temp)
+int8_t SI1145::getIR(uint16_t & temp)
 {
     // Variables
     //float valf;  
-    int ret;                        // ir value
+    int8_t ret;                        // ir value
     char reg[1];                         // register
     char data[2] = {0,0};                // data 2 x 8 bits
     uint16_t vali;                       // ir value
@@ -223,11 +223,11 @@ int SI1145::getIR(uint16_t & temp)
     return ret;
 }
 
-int SI1145::getPROX(uint16_t & temp)
+int8_t SI1145::getPROX(uint16_t & temp)
 {
     // Variables
     //float valf;   
-    int ret;                       // prox value
+    int8_t ret;                       // prox value
     char reg[1];                         // register
     char data[2] = {0,0};                // data 2 x 8 bits
     uint16_t vali;                       // prox value
